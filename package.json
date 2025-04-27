@@ -1,0 +1,47 @@
+{
+  "name": "admin-shop",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.9.0+sha512.0486e394640d3c1fb3c9d43d49cf92879ff74f8516959c235308f5a8f62e2e19528a65cdc2a3058f587cde71eba3d5b56327c8c33a97e4c4051ca48a10ca2d5f",
+  "scripts": {
+    "dev": "vite",
+    "build": "run-p type-check \"build-only {@}\" --",
+    "preview": "vite preview",
+    "test:unit": "vitest",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --build",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.4",
+    "pinia": "^3.0.1",
+    "tailwindcss": "^4.1.4",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^4.12.0",
+    "@tsconfig/node22": "^22.0.1",
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "@vue/test-utils": "^2.4.6",
+    "@vue/tsconfig": "^0.7.0",
+    "eslint": "^9.25.1",
+    "husky": "^9.1.7",
+    "jsdom": "^26.0.0",
+    "lint-staged": "^15.5.1",
+    "npm-run-all2": "^7.0.2",
+    "typescript": "~5.8.0",
+    "vite": "^6.2.4",
+    "vite-plugin-vue-devtools": "^7.7.2",
+    "vitest": "^3.1.1",
+    "vue-tsc": "^2.2.8"
+  },
+  "lint-staged": {
+    "*": "pnpm lint"
+  }
+}
