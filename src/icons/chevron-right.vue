@@ -6,7 +6,3 @@
     </g>
   </svg>
 </template>
-
-<style scoped>
-
-</style>
