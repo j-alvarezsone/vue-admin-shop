@@ -2,12 +2,32 @@
 import { getProducts } from "@/features/products/actions";
 import ProductList from "@/features/products/components/ProductList.vue";
 import ProductListSkeleton from "@/features/products/components/ProductListSkeleton.vue";
+import Pagination from "@/features/shared/components/Pagination.vue";
 
-import { useQuery } from "@tanstack/vue-query";
+import { useQuery, useQueryClient } from "@tanstack/vue-query";
+import { ref, watch, watchEffect } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const page = ref<number>(Number(route.query.page || 1));
+const queryClient = useQueryClient();
 
 const { data: products, isLoading } = useQuery({
-  queryKey: ["products"],
-  queryFn: () => getProducts(),
+  queryKey: ["products", { page }],
+  queryFn: () => getProducts(page.value),
+});
+
+watch(() => route.query.page, (newPage) => {
+  page.value = Number(newPage || 1);
+
+  window.scrollTo({ behavior: "smooth", top: 0 });
+});
+
+watchEffect(() => {
+  queryClient.prefetchQuery({
+    queryKey: ["products", { page: page.value + 1 }],
+    queryFn: () => getProducts(page.value + 1),
+  });
 });
 </script>
 
@@ -49,4 +69,8 @@ const { data: products, isLoading } = useQuery({
 
   <ProductListSkeleton v-if="isLoading" />
   <ProductList v-else-if="products?.length" :products />
+  <Pagination
+    :has-more-data="!!products && products.length < 10"
+    :page
+  />
 </template>
