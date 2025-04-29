@@ -1,4 +1,3 @@
-import type { RemovableRef } from "@vueuse/core";
 import type { AuthStatus } from "../types";
 import type { User } from "./../types/user";
 import { useLocalStorage } from "@vueuse/core";
@@ -15,7 +14,7 @@ export const useAuthStore = defineStore("auth", () => {
 ** State **
 ******/
   const user = ref<User | undefined>();
-  const token = ref<RemovableRef<string>>(useLocalStorage("token", ""));
+  const token = useLocalStorage("token", "");
   const authStatus = ref<AuthStatus>(AUTH_STATUS.Checking);
 
   /*******
