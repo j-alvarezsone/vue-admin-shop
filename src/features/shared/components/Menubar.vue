@@ -14,12 +14,16 @@ import Button from "./Button.vue";
       </a>
       <div class="mt-2 sm:mt-0 sm:flex gap-6 md:order-2">
         <!-- Login Button -->
-        <Button class="hidden md:inline-block" size="sm" outlined>
-          Login
-        </Button>
-        <Button class="hidden md:inline-block" size="sm">
-          Register
-        </Button>
+        <RouterLink to="/auth/login">
+          <Button class="hidden md:inline-block" size="sm" outlined>
+            Login
+          </Button>
+        </RouterLink>
+        <RouterLink to="/auth/register">
+          <Button class="hidden md:inline-block" size="sm">
+            Register
+          </Button>
+        </RouterLink>
         <Button class="md:hidden" icon="hamburger" variant="transparent">
           <span class="sr-only">Open main menu</span>
         </Button>

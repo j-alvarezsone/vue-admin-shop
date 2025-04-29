@@ -4,7 +4,7 @@ import type { User } from "./../types/user";
 import { useLocalStorage } from "@vueuse/core";
 import { acceptHMRUpdate, defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
-import { loginAction } from "../actions";
+import { checkAuthAction, loginAction } from "../actions";
 import { registerAction } from "../actions/register";
 import { AUTH_STATUS } from "./../types/auth-status";
 
@@ -84,6 +84,25 @@ export const useAuthStore = defineStore("auth", () => {
     return false;
   }
 
+  async function checkAuthStatus(): Promise<boolean> {
+    try {
+      const resp = await checkAuthAction();
+
+      if (!resp.ok) {
+        return logout();
+      }
+
+      authStatus.value = AUTH_STATUS.Authenticated;
+      user.value = resp.user;
+      token.value = resp.token;
+
+      return true;
+    } catch (error) {
+      console.log(error);
+      return logout();
+    }
+  }
+
   return {
     user,
     token,
@@ -95,6 +114,7 @@ export const useAuthStore = defineStore("auth", () => {
     login,
     register,
     logout,
+    checkAuthStatus,
   };
 });
 
@@ -118,5 +138,6 @@ export function useAuthActions() {
     login: store.login,
     register: store.register,
     logout: store.logout,
+    checkAuthStatus: store.checkAuthStatus,
   };
 }
