@@ -86,6 +86,7 @@ export const useAuthStore = defineStore("auth", () => {
     user.value = undefined;
     token.value = "";
     authStatus.value = AUTH_STATUS.Unauthenticated;
+    localStorage.removeItem("token");
 
     await router.replace({ name: "login" });
 
