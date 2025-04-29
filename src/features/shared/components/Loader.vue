@@ -40,7 +40,7 @@ const textStyle = computed(() => {
 </script>
 
 <template>
-  <div class="flex items-center justify-center">
+  <div class="centered">
     <div v-if="isTextVisible" class="wavy mr-2" :class="textStyle">
       <span style="--i: 1">L</span>
       <span style="--i: 2">o</span>

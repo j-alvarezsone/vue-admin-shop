@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+
+@layer utilities {
+  .centered {
+    @apply flex items-center justify-center;
+  }
+}
