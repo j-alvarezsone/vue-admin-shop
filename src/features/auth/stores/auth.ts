@@ -24,7 +24,7 @@ export const useAuthStore = defineStore("auth", () => {
   const isChecking = computed(() => authStatus.value === AUTH_STATUS.Checking);
   const isAuthenticated = computed(() => authStatus.value === AUTH_STATUS.Authenticated);
   const userName = computed(() => user.value?.fullName);
-  const isAdmin = computed(() => user.value?.roles.includes("admin"));
+  const isAdmin = computed(() => user.value?.roles.includes("admin") ?? false);
 
   /*******
 ** Actions **
@@ -82,10 +82,12 @@ export const useAuthStore = defineStore("auth", () => {
     }
   }
 
-  function logout() {
+  async function logout() {
     user.value = undefined;
     token.value = "";
     authStatus.value = AUTH_STATUS.Unauthenticated;
+
+    await router.replace({ name: "login" });
 
     return false;
   }

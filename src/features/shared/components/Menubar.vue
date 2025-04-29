@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import { useAuthActions, useAuthState } from "@/features/auth/stores/auth";
 import Button from "./Button.vue";
+
+const { isAuthenticated, isAdmin } = useAuthState();
+const { logout } = useAuthActions();
 </script>
 
 <template>
@@ -13,17 +17,28 @@ import Button from "./Button.vue";
         <span class="self-center whitespace-nowrap text-xl font-semibold">Termcode</span>
       </a>
       <div class="mt-2 sm:mt-0 sm:flex gap-6 md:order-2">
-        <!-- Login Button -->
-        <RouterLink to="/auth/login">
-          <Button class="hidden md:inline-block" size="sm" outlined>
-            Login
+        <template v-if="isAuthenticated">
+          <RouterLink v-if="isAdmin" to="/admin">
+            <Button class="hidden md:inline-block" size="sm" outlined>
+              Admin
+            </Button>
+          </RouterLink>
+          <Button class="hidden md:inline-block" size="sm" @click="logout">
+            Logout
           </Button>
-        </RouterLink>
-        <RouterLink to="/auth/register">
-          <Button class="hidden md:inline-block" size="sm">
-            Register
-          </Button>
-        </RouterLink>
+        </template>
+        <template v-else>
+          <RouterLink to="/auth/login">
+            <Button class="hidden md:inline-block" size="sm" outlined>
+              Login
+            </Button>
+          </RouterLink>
+          <RouterLink to="/auth/register">
+            <Button class="hidden md:inline-block" size="sm">
+              Register
+            </Button>
+          </RouterLink>
+        </template>
         <Button class="md:hidden" icon="hamburger" variant="transparent">
           <span class="sr-only">Open main menu</span>
         </Button>

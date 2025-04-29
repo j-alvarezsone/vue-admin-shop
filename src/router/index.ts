@@ -1,3 +1,4 @@
+import { adminRoutes } from "@/features/admin/routes";
 import { authRoutes } from "@/features/auth/routes";
 import { useAuthActions, useAuthState } from "@/features/auth/stores/auth";
 import { AUTH_STATUS } from "@/features/auth/types";
@@ -20,6 +21,7 @@ const router = createRouter({
       ],
     },
     authRoutes,
+    adminRoutes,
   ],
 });
 
