@@ -1,28 +1,64 @@
 <script lang="ts" setup>
-import { useRouter } from "vue-router";
+import Button from "@/features/shared/components/Button.vue";
+import { reactive, useTemplateRef, watchEffect } from "vue";
+import { useToast } from "vue-toastification";
+import { useAuthActions } from "../stores/auth";
 
-const router = useRouter();
+const { login } = useAuthActions();
+const toast = useToast();
+const form = reactive({
+  email: "",
+  password: "",
+  remember: false,
+});
 
-function onLogin() {
-  localStorage.setItem("userId", "ABC-123");
+const emailInputRef = useTemplateRef("emailInputRef");
+const passwordInputRef = useTemplateRef("passwordInputRef");
 
-  const lastPath = localStorage.getItem("lastPath") ?? "/";
+async function onLogin() {
+  if (form.email === "") {
+    return emailInputRef.value?.focus();
+  }
 
-  router.replace(lastPath);
+  if (form.password.length < 6) {
+    return passwordInputRef.value?.focus();
+  }
+
+  if (form.remember) {
+    localStorage.setItem("email", form.email);
+  } else {
+    localStorage.removeItem("email");
+  }
+
+  const ok = await login(form.email, form.password);
+
+  if (ok) { return; }
+
+  toast.error("Invalid email or password");
 }
+
+watchEffect(() => {
+  const email = localStorage.getItem("email");
+  if (email) {
+    form.email = email;
+    form.remember = true;
+  }
+});
 </script>
 
 <template>
   <h1 class="text-2xl font-semibold mb-4">
     Login
   </h1>
-  <form action="#" method="POST">
+  <form @submit.prevent="onLogin">
     <div class="mb-4">
-      <label for="username" class="block text-gray-600">Username</label>
+      <label for="email" class="block text-gray-600">Email</label>
       <input
-        id="username"
+        id="email"
+        ref="emailInputRef"
+        v-model="form.email"
         type="text"
-        name="username"
+        name="email"
         class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
         autocomplete="off"
       >
@@ -31,6 +67,8 @@ function onLogin() {
       <label for="password" class="block text-gray-600">Password</label>
       <input
         id="password"
+        ref="passwordInputRef"
+        v-model="form.password"
         type="password"
         name="password"
         class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
@@ -38,22 +76,21 @@ function onLogin() {
       >
     </div>
     <div class="mb-4 flex items-center">
-      <input id="remember" type="checkbox" name="remember" class="text-blue-500">
-      <label for="remember" class="text-gray-600 ml-2">Remember Me</label>
+      <input id="remember" v-model="form.remember" type="checkbox" name="remember" class="text-blue-500">
+      <label for="remember" class="text-gray-600 ml-2">Remember User</label>
     </div>
     <div class="mb-6 text-blue-500">
       <a href="#" class="hover:underline">Forgot Password?</a>
     </div>
-    <button
-      type="button"
-      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
-      @click="onLogin"
+    <Button
+      class="w-full"
+      type="submit"
     >
       Login
-    </button>
+    </Button>
   </form>
   <div class="mt-6 text-blue-500 text-center">
-    <RouterLink :to="{ name: 'register' }" class="hover:underline">
+    <RouterLink :to="{ name: 'register' }" class="hover:underline underline-offset-4">
       Sign up Here
     </RouterLink>
   </div>

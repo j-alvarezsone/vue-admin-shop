@@ -13,7 +13,7 @@ interface LoginSuccess {
   token: string
 }
 
-export async function login(email: string, password: string): Promise<LoginSuccess | loginError> {
+export async function loginAction(email: string, password: string): Promise<LoginSuccess | loginError> {
   try {
     const { data } = await tesloApi.post<AuthResponse>("/auth/login", { email, password });
 

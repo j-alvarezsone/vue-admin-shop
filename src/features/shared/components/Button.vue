@@ -45,8 +45,7 @@ const {
 const btnRef = useTemplateRef("btnRef");
 const hasLabel = computed(() => !!btnRef.value?.textContent);
 const ariaLabel = computed(() => {
-  if (!hasLabel.value && icon)
-    return icon;
+  if (!hasLabel.value && icon) { return icon; }
 
   return btnRef.value?.textContent ?? "";
 });

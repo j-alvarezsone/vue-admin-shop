@@ -1,12 +1,54 @@
+<script setup lang="ts">
+import Button from "@/features/shared/components/Button.vue";
+import { reactive, useTemplateRef } from "vue";
+import { useToast } from "vue-toastification";
+import { useAuthActions } from "../stores/auth";
+
+const { register } = useAuthActions();
+const toast = useToast();
+
+const fullNameInputRef = useTemplateRef("fullNameInputRef");
+const emailInputRef = useTemplateRef("emailInputRef");
+const passwordInputRef = useTemplateRef("passwordInputRef");
+
+const form = reactive({
+  fullName: "",
+  email: "",
+  password: "",
+});
+
+async function onRegister() {
+  if (form.fullName.length < 2) {
+    return fullNameInputRef.value?.focus();
+  }
+
+  if (form.email === "") {
+    return emailInputRef.value?.focus();
+  }
+
+  if (form.password.length < 6) {
+    return passwordInputRef.value?.focus();
+  }
+
+  const { ok, message } = await register(form.fullName, form.email, form.password);
+
+  if (ok) { return; }
+
+  toast.error(message);
+}
+</script>
+
 <template>
   <h1 class="text-2xl font-semibold mb-4">
     Register
   </h1>
-  <form action="#" method="POST">
+  <form @submit.prevent="onRegister">
     <div class="mb-4">
       <label for="name" class="block text-gray-600">Name</label>
       <input
         id="name"
+        ref="fullNameInputRef"
+        v-model="form.fullName"
         type="text"
         name="name"
         class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
@@ -15,11 +57,13 @@
     </div>
 
     <div class="mb-4">
-      <label for="username" class="block text-gray-600">Username</label>
+      <label for="email" class="block text-gray-600">Email</label>
       <input
-        id="username"
+        id="email"
+        ref="emailInputRef"
+        v-model="form.email"
         type="text"
-        name="username"
+        name="email"
         class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
         autocomplete="off"
       >
@@ -29,6 +73,8 @@
       <label for="password" class="block text-gray-600">Password</label>
       <input
         id="password"
+        ref="passwordInputRef"
+        v-model="form.password"
         type="password"
         name="password"
         class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
@@ -36,21 +82,16 @@
       >
     </div>
 
-    <div class="mb-4 flex items-center">
-      <input id="remember" type="checkbox" name="remember" class="text-blue-500">
-      <label for="remember" class="text-gray-600 ml-2">Remember Me</label>
-    </div>
-
     <div class="mb-6 text-blue-500">
       <a href="#" class="hover:underline">Forgot Password?</a>
     </div>
 
-    <button
+    <Button
       type="submit"
-      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
+      class="w-full"
     >
-      Login
-    </button>
+      Sign Up
+    </Button>
   </form>
 
   <div class="mt-6 text-blue-500 text-center">

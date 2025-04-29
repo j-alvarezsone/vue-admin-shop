@@ -5,8 +5,7 @@ const RIPPLE_ANIM_DURATION = 600;
 export const ripple: Directive = {
   beforeMount(el: HTMLElement & { rippleShow?: (e: MouseEvent | TouchEvent) => void }, { value }: DirectiveBinding) {
     const rippleShow = (e: MouseEvent | TouchEvent) => {
-      if (typeof value === "object" && value.disabled)
-        return;
+      if (typeof value === "object" && value.disabled) { return; }
 
       const rect = el.getBoundingClientRect();
 
