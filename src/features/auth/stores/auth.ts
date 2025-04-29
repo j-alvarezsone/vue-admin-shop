@@ -4,12 +4,14 @@ import type { User } from "./../types/user";
 import { useLocalStorage } from "@vueuse/core";
 import { acceptHMRUpdate, defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 import { checkAuthAction, loginAction } from "../actions";
 import { registerAction } from "../actions/register";
 import { AUTH_STATUS } from "./../types/auth-status";
 
 export const useAuthStore = defineStore("auth", () => {
-/*******
+  const router = useRouter();
+  /*******
 ** State **
 ******/
   const user = ref<User | undefined>();
@@ -40,6 +42,8 @@ export const useAuthStore = defineStore("auth", () => {
       token.value = resp.token;
       authStatus.value = AUTH_STATUS.Authenticated;
 
+      await router.replace({ name: "home" });
+
       return true;
     } catch (error) {
       console.log(error);
@@ -62,6 +66,8 @@ export const useAuthStore = defineStore("auth", () => {
       user.value = resp.user;
       token.value = resp.token;
       authStatus.value = AUTH_STATUS.Authenticated;
+
+      await router.replace({ name: "home" });
 
       return {
         ok: true,

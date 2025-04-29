@@ -1,4 +1,6 @@
 import { authRoutes } from "@/features/auth/routes";
+import { useAuthActions, useAuthState } from "@/features/auth/stores/auth";
+import { AUTH_STATUS } from "@/features/auth/types";
 import { createRouter, createWebHistory } from "vue-router";
 import ShopLayout from "../layouts/ShopLayout.vue";
 
@@ -22,3 +24,31 @@ const router = createRouter({
 });
 
 export default router;
+
+router.beforeEach(async (to, _, next) => {
+  const { token, authStatus, user } = useAuthState();
+  const { checkAuthStatus } = useAuthActions();
+
+  if (!token.value && to.path.startsWith("/auth")) {
+    return next();
+  }
+
+  if (!token.value) {
+    return next({ name: "login" });
+  }
+
+  if (to.path.startsWith("/auth") && authStatus.value === AUTH_STATUS.Authenticated) {
+    return next({ name: "home" });
+  }
+
+  if (!user.value && token.value) {
+    await checkAuthStatus();
+    if (to.path.startsWith("/auth")) {
+      return next({ name: "home" });
+    }
+
+    return next();
+  }
+
+  next();
+});
