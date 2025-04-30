@@ -1,1 +1,1 @@
-export type IconName = "chevron-right" | "chevron-left" | "cart" | "hamburger";
+export type IconName = "chevron-right" | "chevron-left" | "cart" | "hamburger" | "plus";

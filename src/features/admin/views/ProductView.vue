@@ -1,83 +1,98 @@
 <script setup lang="ts">
-import { getProducts } from "@/features/products/actions";
-import Pagination from "@/features/shared/components/Pagination.vue";
-import usePagination from "@/features/shared/composables/usePagination";
-import { useQuery, useQueryClient } from "@tanstack/vue-query";
-import { watchEffect } from "vue";
-import AdminProductsSkeleton from "../components/AdminProductsSkeleton.vue";
+import Button from "@/features/shared/components/Button.vue";
 
-const queryClient = useQueryClient();
-const { page } = usePagination();
-
-const { data: products, isLoading } = useQuery({
-  queryKey: ["products", { page }],
-  queryFn: () => getProducts(page.value),
-});
-
-watchEffect(() => {
-  queryClient.prefetchQuery({
-    queryKey: ["products", { page: page.value + 1 }],
-    queryFn: () => getProducts(page.value + 1),
-  });
-});
+const allSizes = ["XS", "S", "M", "L", "XL", "XXL"];
 </script>
 
 <template>
   <div class="bg-white px-5 py-2 rounded">
     <h1 class="text-3xl">
-      Products
+      Product: <small class="text-blue-500">name</small>
     </h1>
-    <div class="py-8 w-full">
-      <div class="shadow overflow-hidden rounded border-b border-gray-200">
-        <table class="min-w-full bg-white">
-          <thead class="bg-gray-800 text-white">
-            <tr>
-              <th class="w-10 text-left py-3 px-4 uppercase font-semibold text-sm">
-                Images
-              </th>
-              <th class="flex-1 text-left py-3 px-4 uppercase font-semibold text-sm">
-                Title
-              </th>
-              <th class="w-28 py-3 px-4 uppercase font-semibold text-sm">
-                Price
-              </th>
-              <th class="w-60 text-left py-3 px-4 uppercase font-semibold text-sm">
-                Sizes
-              </th>
-            </tr>
-          </thead>
-          <AdminProductsSkeleton v-if="isLoading" />
-          <tbody v-else class="text-gray-700">
-            <tr
-              v-for="product in products"
-              :key="product.id"
-              class="even:bg-gray-100 odd:bg-white hover:bg-gray-200"
-            >
-              <td class="text-left py-3 px-4">
-                <img :src="product.images[0]" :alt="product.title" class="size-10 object-cover">
-              </td>
-              <td class="text-left py-3 px-4">
-                <RouterLink class="hover:text-blue-500 hover:underline underline-offset-4" :to="{ name: 'admin-products', params: { id: product.id } }">
-                  {{ product.title }}
-                </RouterLink>
-              </td>
-              <td class="text-center py-3 px-4">
-                <span class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs font-semibold">
-                  ${{ product.price }}
-                </span>
-              </td>
-              <td class="text-left py-3 px-4">
-                {{ product.sizes.join(", ") }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <hr class="my-4">
+
+    <form class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div class="flex flex-col gap-4">
+        <div>
+          <label for="title" class="form-label">title</label>
+          <input id="title" type="text" class="form-control">
+        </div>
+
+        <div>
+          <label for="slug" class="form-label">Slug</label>
+          <input id="slug" type="text" class="form-control">
+        </div>
+
+        <div>
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            id="description"
+            class="shadow h-32 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </div>
+
+        <div class="flex flex-ro gap-3">
+          <div>
+            <label for="price" class="form-label">Price</label>
+            <input id="price" type="number" class="form-control">
+          </div>
+
+          <div>
+            <label for="stock" class="form-label">Inventory</label>
+            <input id="stock" type="number" class="form-control">
+          </div>
+        </div>
+
+        <div>
+          <label for="sizes" class="form-label">Sizes</label>
+          <div class="flex gap-4">
+            <Button v-for="size in allSizes" :key="size" class="flex-1" variant="tertiary">
+              {{ size }}
+            </Button>
+          </div>
+        </div>
       </div>
-    </div>
-    <Pagination
-      class="bg-white"
-      :has-more-data="!!products && products.length < 10"
-      :page
-    />
+      <div>
+        <label for="stock" class="form-label">Images</label>
+        <div class="flex p-2 overflow-x-auto space-x-8 w-full h-[265px] bg-gray-200 rounded">
+          <div class="flex-shrink-0">
+            <img src="https://placehold.co/250x250" alt="imagen" class="w-[250px] h-[250px]">
+          </div>
+
+          <div class="flex-shrink-0">
+            <img src="https://placehold.co/250x250" alt="imagen" class="w-[250px] h-[250px]">
+          </div>
+        </div>
+        <div class="col-span-2 my-2">
+          <label for="image" class="form-label">Upload image</label>
+
+          <input id="image" multiple type="file" class="form-control">
+        </div>
+        <div class="mb-4">
+          <label for="stock" class="form-label">Gender</label>
+          <select class="form-control">
+            <option value="">
+              Select
+            </option>
+            <option value="kid">
+              Child
+            </option>
+            <option value="women">
+              Woman
+            </option>
+            <option value="men">
+              Man
+            </option>
+          </select>
+        </div>
+        <div class="my-4 text-right">
+          <Button
+            type="submit"
+          >
+            Save
+          </Button>
+        </div>
+      </div>
+    </form>
   </div>
 </template>

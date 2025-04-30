@@ -52,7 +52,7 @@ const ariaLabel = computed(() => {
 const style = computed(() => {
   return [
     // Alignments
-    "inline-flex items-center justify-center text-center overflow-hidden gap-2 whitespace-nowrap grouped-button",
+    "inline-flex items-center justify-center text-center overflow-hidden gap-2 whitespace-nowrap grouped-button font-medium",
     // Shapes
     { "rounded-lg": !rounded },
     { "rounded-full": rounded },
@@ -92,7 +92,7 @@ const style = computed(() => {
     },
     // Danger
     {
-      "bg-error-600 text-white hover:bg-error-700 focus:ring-error-300/50":
+      "bg-red-600 text-white hover:bg-red-700 focus:ring-red-300/50":
         variant === "danger" && !disabled && !loading && !outlined && !text && !link,
     },
     // Transparent
@@ -117,7 +117,7 @@ const style = computed(() => {
     },
     // Danger
     {
-      "bg-white text-error-700 border border-error-300 hover:bg-error-50 hover:text-error-800 focus:ring-error-300/50":
+      "bg-white text-red-700 border border-red-300 hover:bg-red-50 hover:text-red-800 focus:ring-red-300/50":
         variant === "danger" && !disabled && !loading && outlined,
     },
     // --- Text ---
