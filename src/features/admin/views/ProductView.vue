@@ -1,24 +1,17 @@
 <script setup lang="ts">
 import { getProducts } from "@/features/products/actions";
 import Pagination from "@/features/shared/components/Pagination.vue";
+import usePagination from "@/features/shared/composables/usePagination";
 import { useQuery, useQueryClient } from "@tanstack/vue-query";
-import { ref, watch, watchEffect } from "vue";
-import { useRoute } from "vue-router";
+import { watchEffect } from "vue";
 import AdminProductsSkeleton from "../components/AdminProductsSkeleton.vue";
 
-const route = useRoute();
-const page = ref<number>(Number(route.query.page || 1));
 const queryClient = useQueryClient();
+const { page } = usePagination();
 
 const { data: products, isLoading } = useQuery({
   queryKey: ["products", { page }],
   queryFn: () => getProducts(page.value),
-});
-
-watch(() => route.query.page, (newPage) => {
-  page.value = Number(newPage || 1);
-
-  window.scrollTo({ behavior: "smooth", top: 0 });
 });
 
 watchEffect(() => {
