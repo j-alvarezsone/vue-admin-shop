@@ -2,14 +2,18 @@ import type { Product } from "../types/product";
 import { tesloApi } from "@/api/tesloApi";
 
 export async function createUpdateProductAction(product: Partial<Product>) {
-  if (product.id && product.id !== "") {
-    return await updateProduct(product);
+  const productId = product.id;
+
+  product = cleanProductForCreateUpdate(product);
+
+  if (productId && productId !== "") {
+    return await updateProduct(productId, product);
   }
 
   return await createProduct(product);
 }
 
-async function updateProduct(product: Partial<Product>) {
+function cleanProductForCreateUpdate(product: Partial<Product>) {
   const images: string[] = product.images?.map((image) => {
     if (image.startsWith("http")) {
       const imageName = image.split("/").pop();
@@ -19,11 +23,14 @@ async function updateProduct(product: Partial<Product>) {
     return image;
   }) ?? [];
 
-  const productId = product.id;
   delete product.id;
   delete product.user;
   product.images = images;
 
+  return product;
+}
+
+async function updateProduct(productId: string, product: Partial<Product>) {
   try {
     const { data } = await tesloApi.patch<Product>(`/products/${productId}`, product);
 
@@ -35,19 +42,6 @@ async function updateProduct(product: Partial<Product>) {
 }
 
 async function createProduct(product: Partial<Product>) {
-  const images: string[] = product.images?.map((image) => {
-    if (image.startsWith("http")) {
-      const imageName = image.split("/").pop();
-
-      return imageName ? image : "";
-    }
-    return image;
-  }) ?? [];
-
-  delete product.id;
-  delete product.user;
-  product.images = images;
-
   try {
     const { data } = await tesloApi.post<Product>("/products", product);
 
