@@ -42,7 +42,7 @@ const style = computed(() => {
   return [
     "w-full border text-base rounded-lg focus:ring-3 block py-2.5 px-3.5 focus:outline-hidden focus:outline-offset-0 placeholder:text-gray-500 resize-none",
     { "bg-gray-50 text-gray-500": props.disabled },
-    { "bg-white text-gray-500": !props.disabled },
+    { "bg-white text-gray-900": !props.disabled },
     // Border
     { "border-gray-300 focus:ring-blue-300/50 focus:border-blue-600": !errors.value.length },
     { "focus:ring-red-300/50 border-red-500": errors.value.length && !props.disabled },
