@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Product } from "@/features/products/types/product";
-import { createUpdateProductAction, getProductById } from "@/features/products/actions";
+import { createUpdateProductAction, getProductByIdAction } from "@/features/products/actions";
 import Button from "@/features/shared/components/ui/Button.vue";
 import InputSelect from "@/features/shared/components/ui/form/InputSelect.vue";
 import InputText from "@/features/shared/components/ui/form/InputText.vue";
@@ -28,7 +28,7 @@ const toast = useToast();
 
 const { data: product, isError, isLoading, refetch } = useQuery({
   queryKey: ["product", route.params.productId],
-  queryFn: () => getProductById(route.params.productId as string),
+  queryFn: () => getProductByIdAction(route.params.productId as string),
   retry: false,
 });
 

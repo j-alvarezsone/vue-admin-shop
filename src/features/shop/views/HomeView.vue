@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getProducts } from "@/features/products/actions";
+import { getProductsAction } from "@/features/products/actions";
 import ProductList from "@/features/products/components/ProductList.vue";
 import ProductListSkeleton from "@/features/products/components/ProductListSkeleton.vue";
 import Pagination from "@/features/shared/components/ui/Pagination.vue";
@@ -13,13 +13,13 @@ const { page } = usePagination();
 
 const { data: products, isLoading } = useQuery({
   queryKey: ["products", { page }],
-  queryFn: () => getProducts(page.value),
+  queryFn: () => getProductsAction(page.value),
 });
 
 watchEffect(() => {
   queryClient.prefetchQuery({
     queryKey: ["products", { page: page.value + 1 }],
-    queryFn: () => getProducts(page.value + 1),
+    queryFn: () => getProductsAction(page.value + 1),
   });
 });
 </script>

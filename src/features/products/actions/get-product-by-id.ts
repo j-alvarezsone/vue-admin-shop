@@ -1,8 +1,8 @@
 import type { Product } from "../types/product";
 import { tesloApi } from "@/api/tesloApi";
-import { getProductImage } from "./get-product-image";
+import { getProductImageAction } from "./get-product-image";
 
-export async function getProductById(productId: string): Promise<Product> {
+export async function getProductByIdAction(productId: string): Promise<Product> {
   if (productId === "create") {
     return {
       id: "",
@@ -22,7 +22,7 @@ export async function getProductById(productId: string): Promise<Product> {
     const { data } = await tesloApi.get<Product>(`/products/${productId}`);
     return {
       ...data,
-      images: data.images.map(getProductImage),
+      images: data.images.map(getProductImageAction),
     };
   } catch (error) {
     console.error("Error fetching product by ID:", error);
