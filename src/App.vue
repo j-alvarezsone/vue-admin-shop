@@ -2,7 +2,7 @@
 import { VueQueryDevtools } from "@tanstack/vue-query-devtools";
 import { RouterView } from "vue-router";
 import { useAuthState } from "./features/auth/stores/auth";
-import Loader from "./features/shared/components/Loader.vue";
+import Loader from "./features/shared/components/ui/Loader.vue";
 
 const { isChecking, token } = useAuthState();
 </script>

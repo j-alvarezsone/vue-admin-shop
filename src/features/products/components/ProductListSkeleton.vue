@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Skeleton from "@/features/shared/components/Skeleton.vue";
+import Skeleton from "@/features/shared/components/ui/Skeleton.vue";
 import { computed } from "vue";
 
 interface Props {

@@ -1,9 +1,4 @@
 import type { ObjectValues } from "@/features/shared/types";
-
-export const AUTH_STATUS = {
-  Authenticated: "authenticated",
-  Unauthenticated: "unauthenticated",
-  Checking: "checking",
-} as const;
+import type { AUTH_STATUS } from "../constants/auth";
 
 export type AuthStatus = ObjectValues<typeof AUTH_STATUS>;

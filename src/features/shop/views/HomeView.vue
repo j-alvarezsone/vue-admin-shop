@@ -2,7 +2,7 @@
 import { getProducts } from "@/features/products/actions";
 import ProductList from "@/features/products/components/ProductList.vue";
 import ProductListSkeleton from "@/features/products/components/ProductListSkeleton.vue";
-import Pagination from "@/features/shared/components/Pagination.vue";
+import Pagination from "@/features/shared/components/ui/Pagination.vue";
 import usePagination from "@/features/shared/composables/usePagination";
 
 import { useQuery, useQueryClient } from "@tanstack/vue-query";

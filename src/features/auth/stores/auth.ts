@@ -6,7 +6,7 @@ import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { checkAuthAction, loginAction } from "../actions";
 import { registerAction } from "../actions/register";
-import { AUTH_STATUS } from "./../types/auth-status";
+import { AUTH_STATUS } from "../constants/auth";
 
 export const useAuthStore = defineStore("auth", () => {
   const router = useRouter();

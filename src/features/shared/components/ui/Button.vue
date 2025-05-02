@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { IconName } from "@/icons/types";
+import type { AllowedComponentProps } from "vue";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { computed, useTemplateRef } from "vue";
@@ -7,7 +8,7 @@ import Icon from "./Icon.vue";
 import Loader from "./Loader.vue";
 
 interface Props {
-  class?: string
+  class?: AllowedComponentProps["class"]
   type?: "button" | "submit" | "reset"
   disabled?: boolean
   size?: "sm" | "md" | "lg" | "xl" | "2xl"
@@ -176,7 +177,7 @@ const style = computed(() => {
   ];
 });
 
-const mergedClasses = computed(() => twMerge(clsx(style.value, customClass)));
+const mergedClasses = computed(() => twMerge(clsx(style.value, customClass as string)));
 
 const iconStyle = computed(() => {
   return [

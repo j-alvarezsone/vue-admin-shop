@@ -8,7 +8,7 @@ const props = defineProps<{
 
 const iconComponent = computed(() => {
   if (props.name) {
-    return defineAsyncComponent(() => import(`../../../icons/${props.name}.vue`));
+    return defineAsyncComponent(() => import(`@/icons/${props.name}.vue`));
   }
 
   return "";

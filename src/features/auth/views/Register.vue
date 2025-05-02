@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Button from "@/features/shared/components/Button.vue";
+import Button from "@/features/shared/components/ui/Button.vue";
 import { reactive, useTemplateRef } from "vue";
 import { useToast } from "vue-toastification";
 import { useAuthActions } from "../stores/auth";

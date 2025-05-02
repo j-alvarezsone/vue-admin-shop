@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getProducts } from "@/features/products/actions";
-import Pagination from "@/features/shared/components/Pagination.vue";
+import Pagination from "@/features/shared/components/ui/Pagination.vue";
 import usePagination from "@/features/shared/composables/usePagination";
 import { useQuery, useQueryClient } from "@tanstack/vue-query";
 import { watchEffect } from "vue";

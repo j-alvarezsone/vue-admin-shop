@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useAuthActions, useAuthState } from "@/features/auth/stores/auth";
-import Button from "./Button.vue";
+import Button from "./ui/Button.vue";
 
 const { isAuthenticated, isAdmin } = useAuthState();
 const { logout } = useAuthActions();
