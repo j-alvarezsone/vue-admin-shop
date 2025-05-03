@@ -11,15 +11,17 @@ import { watchEffect } from "vue";
 const queryClient = useQueryClient();
 const { page } = usePagination();
 
-const { data: products, isLoading } = useQuery({
+const { data: products, isLoading, isFetching } = useQuery({
   queryKey: ["products", { page }],
   queryFn: () => getProductsAction(page.value),
+  staleTime: 1000 * 30,
 });
 
 watchEffect(() => {
   queryClient.prefetchQuery({
     queryKey: ["products", { page: page.value + 1 }],
     queryFn: () => getProductsAction(page.value + 1),
+    staleTime: 1000 * 30,
   });
 });
 </script>
@@ -31,7 +33,7 @@ watchEffect(() => {
         All Products
       </h1>
     </div>
-    <ProductListSkeleton v-if="isLoading" />
+    <ProductListSkeleton v-if="isLoading || isFetching" />
     <ProductList v-else-if="products?.length" :products />
     <Pagination
       :has-more-data="!!products && products.length < 10"
