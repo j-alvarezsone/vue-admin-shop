@@ -1,18 +1,33 @@
 <script setup lang="ts">
 import { getProductsAction } from "@/features/products/actions";
+import { deleteProductAction } from "@/features/products/actions/delete-product";
 import Badge from "@/features/shared/components/ui/Badge.vue";
+import Button from "@/features/shared/components/ui/Button.vue";
 import Pagination from "@/features/shared/components/ui/Pagination.vue";
 import usePagination from "@/features/shared/composables/usePagination";
-import { useQuery, useQueryClient } from "@tanstack/vue-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { watchEffect } from "vue";
+import { useToast } from "vue-toastification";
 import AdminProductsSkeleton from "../components/AdminProductsSkeleton.vue";
 
 const queryClient = useQueryClient();
 const { page } = usePagination();
+const toast = useToast();
 
 const { data: products, isLoading } = useQuery({
   queryKey: ["products", { page }],
   queryFn: () => getProductsAction(page.value),
+});
+
+const { mutate } = useMutation({
+  mutationFn: deleteProductAction,
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ["products", { page }] });
+    toast.success("Product deleted successfully");
+  },
+  onError: () => {
+    toast.error("Failed to delete product");
+  },
 });
 
 watchEffect(() => {
@@ -69,10 +84,11 @@ watchEffect(() => {
                   </Badge>
                 </span>
               </td>
-              <td class="text-left py-3 px-4">
+              <td class="text-left py-3 px-4 flex  items-center justify-between">
                 <Badge variant="success">
                   {{ product.sizes.join(", ") }}
                 </Badge>
+                <Button v-tooltip="'Delete'" icon="trash" variant="transparent" icon-size="size-6" @click="mutate(product.id)" />
               </td>
             </tr>
           </tbody>
