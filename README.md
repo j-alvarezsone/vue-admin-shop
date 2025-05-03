@@ -17,3 +17,7 @@ Connects to the [Teslo Shop backend](https://github.com/Klerith/nest-teslo-shop/
 9. Run `npm run start:dev`
 10. Open Postman `GET` `http://localhost:3000/api/seed` if SEED EXECUTED
 11. `GET` `http://localhost:3000/api/producs` to verify if contain data
+
+### Login
+* email: test1@gmial.com / test2@gmail.com
+* password: Abc123
