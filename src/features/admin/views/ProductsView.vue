@@ -14,9 +14,10 @@ const queryClient = useQueryClient();
 const { page } = usePagination();
 const toast = useToast();
 
-const { data: products, isLoading } = useQuery({
+const { data: products, isLoading, isFetching } = useQuery({
   queryKey: ["products", { page }],
   queryFn: () => getProductsAction(page.value),
+  staleTime: 1000 * 30,
 });
 
 const { mutate } = useMutation({
@@ -34,6 +35,7 @@ watchEffect(() => {
   queryClient.prefetchQuery({
     queryKey: ["products", { page: page.value + 1 }],
     queryFn: () => getProductsAction(page.value + 1),
+    staleTime: 1000 * 30,
   });
 });
 </script>
@@ -62,7 +64,7 @@ watchEffect(() => {
               </th>
             </tr>
           </thead>
-          <AdminProductsSkeleton v-if="isLoading" />
+          <AdminProductsSkeleton v-if="isLoading || isFetching" />
           <tbody v-else class="text-gray-700">
             <tr
               v-for="product in products"
