@@ -67,9 +67,6 @@ async function onRegister() {
       label="password"
       placeholder="Enter your password"
     />
-    <div class="mb-6 text-blue-500">
-      <a href="#" class="hover:underline">Forgot Password?</a>
-    </div>
     <Button
       type="submit"
       class="w-full"

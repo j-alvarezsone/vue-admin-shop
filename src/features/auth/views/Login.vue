@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import Button from "@/features/shared/components/ui/Button.vue";
+import InputCheckbox from "@/features/shared/components/ui/form/InputCheckbox.vue";
 import InputEmail from "@/features/shared/components/ui/form/InputEmail.vue";
 import InputPassword from "@/features/shared/components/ui/form/InputPassword.vue";
 import { reactive, useTemplateRef, watchEffect } from "vue";
@@ -67,13 +68,7 @@ watchEffect(() => {
       label="password"
       placeholder="Password"
     />
-    <div class="mb-4 flex items-center">
-      <input id="remember" v-model="form.remember" type="checkbox" name="remember" class="text-blue-500">
-      <label for="remember" class="text-gray-600 ml-2">Remember User</label>
-    </div>
-    <div class="mb-6 text-blue-500">
-      <a href="#" class="hover:underline">Forgot Password?</a>
-    </div>
+    <InputCheckbox v-model="form.remember" name="remember" :checked-value="true" label="Remember User" />
     <Button
       class="w-full"
       type="submit"
