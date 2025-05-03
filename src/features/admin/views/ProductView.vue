@@ -8,7 +8,7 @@ import InputTextArea from "@/features/shared/components/ui/form/InputTextArea.vu
 import { useMutation, useQuery } from "@tanstack/vue-query";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useFieldArray, useFieldError, useForm } from "vee-validate";
-import { watch, watchEffect } from "vue";
+import { ref, watch, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import { z } from "zod";
@@ -21,6 +21,7 @@ const options = [
   { value: "women", label: "Women" },
   { value: "kid", label: "Kid" },
 ];
+const imageFiles = ref<File[]>([]);
 
 const route = useRoute();
 const router = useRouter();
@@ -90,6 +91,7 @@ watch(isUpdateSuccess, (value) => {
   resetForm({
     values: updatedProduct.value,
   });
+  imageFiles.value = [];
 });
 
 watch(() => route.params.productId, () => {
@@ -110,12 +112,35 @@ function hasSize(size: string) {
   return sizesFields.value.some((field) => field.value === size);
 }
 
-const onSubmit = handleSubmit((values) => {
-  if (route.params.productId === "create") {
-    mutate(values);
+function onFileChanged(event: Event) {
+  const fileInput = event.target as HTMLInputElement;
+  const fileList = fileInput.files;
+
+  if (!fileList || fileList.length === 0) {
     return;
   }
-  mutate({ id: route.params.productId as string, ...values });
+
+  for (const imageFile of fileList) {
+    imageFiles.value.push(imageFile);
+  }
+}
+
+function temporalImageUrl(imageFile: File) {
+  return URL.createObjectURL(imageFile);
+}
+
+const onSubmit = handleSubmit((values) => {
+  const formValues = {
+    ...values,
+    images: [...values.images, ...imageFiles.value],
+  };
+
+  if (route.params.productId === "create") {
+    mutate(formValues as Product);
+    return;
+  }
+
+  mutate({ id: route.params.productId as string, ...formValues } as Product);
 });
 </script>
 
@@ -131,15 +156,15 @@ const onSubmit = handleSubmit((values) => {
         <InputText name="title" label="title" placeholder="Enter product name" />
         <InputText name="slug" label="slug" placeholder="Unique url identifier" />
         <InputTextArea name="description" label="description" placeholder="Enter product description" />
-        <div class="flex flex-ro gap-3">
+        <div class="flex flex-col lg:flex-row gap-3">
           <InputText class="w-full" name="price" label="price" type="number" />
           <InputText class="w-full" name="stock" label="inventory" type="number" />
         </div>
 
         <div>
           <label for="sizes" class="form-label">Sizes</label>
-          <div class="flex gap-4">
-            <Button v-for="size in allSizes" :key="size" class="flex-1" :class="{ 'bg-gray-400': !hasSize(size) }" variant="tertiary" @click="toggleSize(size)">
+          <div class="flex flex-col lg:flex-row gap-4">
+            <Button v-for="size in allSizes" :key="size" class="lg:flex-1" :class="{ 'bg-gray-400': !hasSize(size) }" variant="tertiary" @click="toggleSize(size)">
               {{ size }}
             </Button>
           </div>
@@ -154,11 +179,20 @@ const onSubmit = handleSubmit((values) => {
           <div v-for="image in imagesFields" :key="image.key" class="flex-shrink-0">
             <img :src="image.value" :alt="values.title" class="w-[250px] h-[250px]">
           </div>
+          <div v-for="imageFile in imageFiles" :key="imageFile.name" class="flex-shrink-0">
+            <img :src="temporalImageUrl(imageFile)" :alt="values.title" class="w-[250px] h-[250px]">
+          </div>
         </div>
         <div class="col-span-2 my-2">
           <label for="image" class="form-label">Upload image</label>
-
-          <input id="image" multiple type="file" class="form-control">
+          <input
+            id="image"
+            class="form-control"
+            multiple
+            type="file"
+            accept="image/*"
+            @change="onFileChanged"
+          >
         </div>
         <InputSelect class="mt-4" name="gender" :options label="gender" placeholder="Select gender" clearable />
         <div class="my-4 text-right">
