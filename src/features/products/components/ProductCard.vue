@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Product } from "../types/product";
-import Button from "@/features/shared/components/ui/Button.vue";
 
 interface Props {
   product: Product
@@ -21,7 +20,6 @@ defineProps<Props>();
 
         <div class="mt-3 flex items-end justify-between">
           <p class="text-lg font-bold text-blue-500">${{ product.price }}</p>
-          <Button icon="cart" size="sm">Add to cart</Button>
         </div>
       </div>
     </a>
