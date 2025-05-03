@@ -13,4 +13,7 @@
   .form-control {
     @apply appearance-none border border-gray-300 rounded-lg w-full py-2 px-3.5 text-gray-900 leading-tight  focus:outline-hidden focus:outline-offset-0 focus:ring-blue-300/50 focus:ring-3 focus:border-blue-600;
 }
+  .active-class {
+    @apply text-blue-500 underline underline-offset-4 decoration-blue-500/50;
+  }
 }
