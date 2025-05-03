@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@layer base {
+  body {
+    @apply min-h-screen;
+  }
+
+  #app {
+    @apply h-dvh lg:h-screen flex flex-col;
+  }
+}
 
 @layer utilities {
   .centered {

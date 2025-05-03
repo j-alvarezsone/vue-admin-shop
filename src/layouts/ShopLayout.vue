@@ -4,9 +4,11 @@ import Menubar from "../features/shared/components/Menubar.vue";
 </script>
 
 <template>
-  <Menubar />
-
-  <RouterView />
-
-  <Footer />
+  <div class="flex flex-col flex-1">
+    <Menubar />
+    <div class="flex flex-col flex-1">
+      <RouterView />
+    </div>
+    <Footer />
+  </div>
 </template>

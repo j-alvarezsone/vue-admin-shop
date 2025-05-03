@@ -25,7 +25,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div>
+  <div class="flex flex-col flex-1">
     <div class="pt-32 bg-gray-100">
       <h1 class="text-center text-2xl font-bold text-gray-800">
         All Products
