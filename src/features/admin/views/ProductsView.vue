@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { getProductsAction } from "@/features/products/actions";
+import Badge from "@/features/shared/components/ui/Badge.vue";
 import Pagination from "@/features/shared/components/ui/Pagination.vue";
 import usePagination from "@/features/shared/composables/usePagination";
 import { useQuery, useQueryClient } from "@tanstack/vue-query";
@@ -62,8 +63,10 @@ watchEffect(() => {
                 </RouterLink>
               </td>
               <td class="text-center py-3 px-4">
-                <span class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs font-semibold">
-                  ${{ product.price }}
+                <span class="font-semibold centered">
+                  <Badge size="sm" class="">
+                    ${{ product.price }}
+                  </Badge>
                 </span>
               </td>
               <td class="text-left py-3 px-4">
