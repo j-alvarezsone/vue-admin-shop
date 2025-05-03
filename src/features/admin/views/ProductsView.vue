@@ -1,18 +1,33 @@
 <script setup lang="ts">
+import type { Size } from "@/features/products/types/product";
 import { getProductsAction } from "@/features/products/actions";
 import { deleteProductAction } from "@/features/products/actions/delete-product";
 import Badge from "@/features/shared/components/ui/Badge.vue";
 import Button from "@/features/shared/components/ui/Button.vue";
+import InputSelect from "@/features/shared/components/ui/form/InputSelect.vue";
+import InputText from "@/features/shared/components/ui/form/InputText.vue";
 import Pagination from "@/features/shared/components/ui/Pagination.vue";
 import usePagination from "@/features/shared/composables/usePagination";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import { watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useToast } from "vue-toastification";
 import AdminProductsSkeleton from "../components/AdminProductsSkeleton.vue";
 
 const queryClient = useQueryClient();
 const { page } = usePagination();
 const toast = useToast();
+
+const search = ref<string>("");
+const size = ref<Size | "all">("all");
+const sizeOptions = [
+  { value: "all", label: "All" },
+  { value: "XS", label: "XS" },
+  { value: "S", label: "S" },
+  { value: "M", label: "M" },
+  { value: "L", label: "L" },
+  { value: "XL", label: "XL" },
+  { value: "XXL", label: "XXL" },
+];
 
 const { data: products, isLoading, isFetching } = useQuery({
   queryKey: ["products", { page }],
@@ -31,6 +46,18 @@ const { mutate } = useMutation({
   },
 });
 
+const filteredProducts = computed(() => {
+  if (!products.value || !size.value) { return products.value; }
+
+  if (size.value !== "all") {
+    return products.value.filter((product) => product.sizes.includes(size.value as Size));
+  }
+
+  return products.value.filter((product) =>
+    product.title.toLowerCase().includes(search.value.toLowerCase()),
+  );
+});
+
 watchEffect(() => {
   queryClient.prefetchQuery({
     queryKey: ["products", { page: page.value + 1 }],
@@ -42,9 +69,13 @@ watchEffect(() => {
 
 <template>
   <div class="bg-white px-5 py-2 rounded">
-    <h1 class="text-3xl">
-      Products
-    </h1>
+    <div class="flex items-center gap-6">
+      <h1 class="text-3xl">
+        Products
+      </h1>
+      <InputText v-model="search" class="w-full" name="search" icon="search" placeholder="Search by title" clearable />
+      <InputSelect v-model="size" :options="sizeOptions" class="w-60" name="size" placeholder="Select size" clearable />
+    </div>
     <div class="py-8 w-full">
       <div class="shadow overflow-hidden rounded border-b border-gray-200">
         <table class="min-w-full bg-white">
@@ -67,7 +98,7 @@ watchEffect(() => {
           <AdminProductsSkeleton v-if="isLoading || isFetching" />
           <tbody v-else class="text-gray-700">
             <tr
-              v-for="product in products"
+              v-for="product in filteredProducts"
               :key="product.id"
               class="even:bg-gray-100 odd:bg-white hover:bg-gray-200"
             >
@@ -87,14 +118,17 @@ watchEffect(() => {
                 </span>
               </td>
               <td class="text-left py-3 px-4 flex  items-center justify-between">
-                <Badge variant="success">
+                <span class="text-sm text-gray-500">
                   {{ product.sizes.join(", ") }}
-                </Badge>
+                </span>
                 <Button v-tooltip="'Delete'" icon="trash" variant="transparent" icon-size="size-6" @click="mutate(product.id)" />
               </td>
             </tr>
           </tbody>
         </table>
+        <div v-if="!filteredProducts?.length" class="h-80 w-full centered">
+          <span class="text-2xl">No products found...</span>
+        </div>
       </div>
     </div>
     <Pagination

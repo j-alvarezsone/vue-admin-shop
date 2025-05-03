@@ -1,4 +1,6 @@
 import type { User } from "@/features/auth/types/user";
+import type { ObjectValues } from "@/features/shared/types";
+import type { SIZES } from "../constants/product";
 
 export interface Product {
   id: string
@@ -14,11 +16,4 @@ export interface Product {
   user: User
 }
 
-export enum Size {
-  L = "L",
-  M = "M",
-  S = "S",
-  Xl = "XL",
-  Xs = "XS",
-  Xxl = "XXL",
-}
+export type Size = ObjectValues<typeof SIZES>;
