@@ -64,13 +64,15 @@ watchEffect(() => {
               </td>
               <td class="text-center py-3 px-4">
                 <span class="font-semibold centered">
-                  <Badge size="sm" class="">
+                  <Badge size="sm">
                     ${{ product.price }}
                   </Badge>
                 </span>
               </td>
               <td class="text-left py-3 px-4">
-                {{ product.sizes.join(", ") }}
+                <Badge variant="success">
+                  {{ product.sizes.join(", ") }}
+                </Badge>
               </td>
             </tr>
           </tbody>

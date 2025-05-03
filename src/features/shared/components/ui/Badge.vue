@@ -41,8 +41,8 @@ const style = computed(() => {
     { "py-0.5 pl-3 pr-2.5": props.size === "lg" && props.icon && props.iconPos === "right" && (props.label || !!slots.default) },
     // --- Variants ---
     { "bg-blue-100 text-blue-700 border border-blue-700/5": props.variant === "primary" },
-    { "bg-success-100 text-success-700 border border-success-700/5": props.variant === "success" },
-    { "bg-warning-100 text-warning-700 border border-warning-700/5": props.variant === "warning" },
+    { "bg-green-100 text-green-700 border border-green-700/5": props.variant === "success" },
+    { "bg-yellow-100 text-yellow-700 border border-yellow-700/5": props.variant === "warning" },
     { "bg-red-100 text-red-700 border border-red-700/5": props.variant === "danger" },
     { "bg-gray-100 text-gray-700 border border-gray-700/5": props.variant === "neutral" },
   ];
