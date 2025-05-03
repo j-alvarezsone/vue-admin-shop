@@ -3,48 +3,54 @@ import Button from "@/features/shared/components/ui/Button.vue";
 import InputCheckbox from "@/features/shared/components/ui/form/InputCheckbox.vue";
 import InputEmail from "@/features/shared/components/ui/form/InputEmail.vue";
 import InputPassword from "@/features/shared/components/ui/form/InputPassword.vue";
-import { reactive, useTemplateRef, watchEffect } from "vue";
+import { toTypedSchema } from "@vee-validate/zod";
+import { useForm } from "vee-validate";
+import { watchEffect } from "vue";
 import { useToast } from "vue-toastification";
+import { z } from "zod";
 import { useAuthActions } from "../stores/auth";
+
+interface Form {
+  email: string
+  password: string
+  remember: boolean
+}
 
 const { login } = useAuthActions();
 const toast = useToast();
-const form = reactive({
-  email: "",
-  password: "",
-  remember: false,
+
+const schema = z.object({
+  email: z.string().email("Invalid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  remember: z.boolean(),
 });
 
-const emailInputRef = useTemplateRef("emailInputRef");
-const passwordInputRef = useTemplateRef("passwordInputRef");
+const { values, setFieldValue, handleSubmit, meta } = useForm<Form>({
+  initialValues: {
+    email: localStorage.getItem("email") || "",
+    password: "",
+    remember: false,
+  },
+  validationSchema: toTypedSchema(schema),
+});
 
-async function onLogin() {
-  if (form.email === "") {
-    return (emailInputRef.value?.$refs.inputRef as HTMLInputElement | undefined)?.focus();
-  }
-
-  if (form.password.length < 6) {
-    return (passwordInputRef.value?.$refs.inputRef as HTMLInputElement | undefined)?.focus();
-  }
-
-  if (form.remember) {
-    localStorage.setItem("email", form.email);
+const onSubmit = handleSubmit(async (values) => {
+  if (values.remember) {
+    localStorage.setItem("email", values.email);
   } else {
     localStorage.removeItem("email");
   }
 
-  const ok = await login(form.email, form.password);
+  const ok = await login(values.email, values.password);
 
   if (ok) { return; }
 
   toast.error("Invalid email or password");
-}
+});
 
 watchEffect(() => {
-  const email = localStorage.getItem("email");
-  if (email) {
-    form.email = email;
-    form.remember = true;
+  if (values.email) {
+    setFieldValue("remember", true);
   }
 });
 </script>
@@ -53,25 +59,22 @@ watchEffect(() => {
   <h1 class="text-2xl font-semibold mb-4">
     Login
   </h1>
-  <form class="space-y-4" @submit.prevent="onLogin">
+  <form class="space-y-4" @submit.prevent="onSubmit">
     <InputEmail
-      ref="emailInputRef"
-      v-model="form.email"
       name="email"
       label="Email"
       placeholder="Email"
     />
     <InputPassword
-      ref="passwordInputRef"
-      v-model="form.password"
       name="password"
       label="password"
       placeholder="Password"
     />
-    <InputCheckbox v-model="form.remember" name="remember" :checked-value="true" label="Remember User" />
+    <InputCheckbox name="remember" :checked-value="true" label="Remember User" />
     <Button
       class="w-full"
       type="submit"
+      :disabled="!meta.valid && meta.touched"
     >
       Login
     </Button>

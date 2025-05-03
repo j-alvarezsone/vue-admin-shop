@@ -3,66 +3,61 @@ import Button from "@/features/shared/components/ui/Button.vue";
 import InputEmail from "@/features/shared/components/ui/form/InputEmail.vue";
 import InputPassword from "@/features/shared/components/ui/form/InputPassword.vue";
 import InputText from "@/features/shared/components/ui/form/InputText.vue";
-import { reactive, useTemplateRef } from "vue";
+import { toTypedSchema } from "@vee-validate/zod";
+import { useForm } from "vee-validate";
 import { useToast } from "vue-toastification";
+import { z } from "zod";
 import { useAuthActions } from "../stores/auth";
+
+interface Form {
+  fullName: string
+  email: string
+  password: string
+}
 
 const { register } = useAuthActions();
 const toast = useToast();
 
-const fullNameInputRef = useTemplateRef("fullNameInputRef");
-const emailInputRef = useTemplateRef("emailInputRef");
-const passwordInputRef = useTemplateRef("passwordInputRef");
-
-const form = reactive({
-  fullName: "",
-  email: "",
-  password: "",
+const schema = z.object({
+  fullName: z.string().min(2, "Full name must be at least 2 characters"),
+  email: z.string().email("Invalid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-async function onRegister() {
-  if (form.fullName.length < 2) {
-    return (fullNameInputRef.value?.$refs.inputRef as HTMLInputElement | undefined)?.focus();
-  }
+const { handleSubmit, meta } = useForm<Form>({
+  initialValues: {
+    fullName: "",
+    email: "",
+    password: "",
+  },
+  validationSchema: toTypedSchema(schema),
+});
 
-  if (form.email === "") {
-    return (emailInputRef.value?.$refs.inputRef as HTMLInputElement | undefined)?.focus();
-  }
-
-  if (form.password.length < 6) {
-    return (passwordInputRef.value?.$refs.inputRef as HTMLInputElement | undefined)?.focus();
-  }
-
-  const { ok, message } = await register(form.fullName, form.email, form.password);
+const onSubmit = handleSubmit(async (values) => {
+  const { ok, message } = await register(values.fullName, values.email, values.password);
 
   if (ok) { return; }
 
   toast.error(message);
-}
+});
 </script>
 
 <template>
   <h1 class="text-2xl font-semibold mb-4">
     Register
   </h1>
-  <form class="space-y-4" @submit.prevent="onRegister">
+  <form class="space-y-4" @submit.prevent="onSubmit">
     <InputText
-      ref="fullNameInputRef"
-      v-model="form.fullName"
       label="name"
       name="fullName"
       placeholder="Enter your name"
     />
     <InputEmail
-      ref="emailInputRef"
-      v-model="form.email"
       name="email"
       label="email"
       placeholder="Enter your email"
     />
     <InputPassword
-      ref="passwordInputRef"
-      v-model="form.password"
       name="password"
       label="password"
       placeholder="Enter your password"
@@ -70,6 +65,7 @@ async function onRegister() {
     <Button
       type="submit"
       class="w-full"
+      :disabled="!meta.valid && meta.touched"
     >
       Sign Up
     </Button>
