@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useClipboard } from "@vueuse/core";
 import { ErrorMessage, useField } from "vee-validate";
-import { computed, ref, toRef, useSlots } from "vue";
+import { computed, ref, toRef, useSlots, useTemplateRef } from "vue";
 
 import BaseIcon from "../Icon.vue";
 import Loader from "../Loader.vue";
@@ -59,6 +59,7 @@ const { value, handleChange, handleBlur, errors } = useField<string>(toRef(props
 });
 
 const isFocused = ref<boolean>(false);
+useTemplateRef("inputRef");
 
 function onHandleChange(e: Event) {
   const target = e.target as HTMLInputElement;
@@ -128,6 +129,7 @@ const style = computed(() => {
         </div>
         <input
           :id="name"
+          ref="inputRef"
           v-focus="focus"
           type="'email'novalidate/"
           :value="value"

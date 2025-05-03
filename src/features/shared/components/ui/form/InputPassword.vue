@@ -3,7 +3,7 @@ import type { TooltipPlacement } from "@/features/shared/types";
 import { TOOLTIP_PLACEMENTS } from "@/features/shared/constants/tooltip";
 import { useClipboard } from "@vueuse/core";
 import { ErrorMessage, useField } from "vee-validate";
-import { computed, ref, toRef, useSlots } from "vue";
+import { computed, ref, toRef, useSlots, useTemplateRef } from "vue";
 import BaseIcon from "../Icon.vue";
 import Loader from "../Loader.vue";
 
@@ -63,6 +63,7 @@ const { value, handleChange, handleBlur, errors } = useField<string>(toRef(props
 
 const isFocused = ref<boolean>(false);
 const mask = ref<boolean>(false);
+useTemplateRef("inputRef");
 
 function onToggleMask() {
   mask.value = !mask.value;
@@ -136,6 +137,7 @@ const style = computed(() => {
         </div>
         <input
           :id="name"
+          ref="inputRef"
           v-focus="focus"
           :type="mask ? 'text' : 'password'"
           :value="value"

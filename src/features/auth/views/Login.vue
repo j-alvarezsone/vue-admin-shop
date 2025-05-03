@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import Button from "@/features/shared/components/ui/Button.vue";
+import InputEmail from "@/features/shared/components/ui/form/InputEmail.vue";
+import InputPassword from "@/features/shared/components/ui/form/InputPassword.vue";
 import { reactive, useTemplateRef, watchEffect } from "vue";
 import { useToast } from "vue-toastification";
 import { useAuthActions } from "../stores/auth";
@@ -17,11 +19,11 @@ const passwordInputRef = useTemplateRef("passwordInputRef");
 
 async function onLogin() {
   if (form.email === "") {
-    return emailInputRef.value?.focus();
+    return (emailInputRef.value?.$refs.inputRef as HTMLInputElement | undefined)?.focus();
   }
 
   if (form.password.length < 6) {
-    return passwordInputRef.value?.focus();
+    return (passwordInputRef.value?.$refs.inputRef as HTMLInputElement | undefined)?.focus();
   }
 
   if (form.remember) {
@@ -50,31 +52,21 @@ watchEffect(() => {
   <h1 class="text-2xl font-semibold mb-4">
     Login
   </h1>
-  <form @submit.prevent="onLogin">
-    <div class="mb-4">
-      <label for="email" class="block text-gray-600">Email</label>
-      <input
-        id="email"
-        ref="emailInputRef"
-        v-model="form.email"
-        type="text"
-        name="email"
-        class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-        autocomplete="off"
-      >
-    </div>
-    <div class="mb-4">
-      <label for="password" class="block text-gray-600">Password</label>
-      <input
-        id="password"
-        ref="passwordInputRef"
-        v-model="form.password"
-        type="password"
-        name="password"
-        class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-        autocomplete="off"
-      >
-    </div>
+  <form class="space-y-4" @submit.prevent="onLogin">
+    <InputEmail
+      ref="emailInputRef"
+      v-model="form.email"
+      name="email"
+      label="Email"
+      placeholder="Email"
+    />
+    <InputPassword
+      ref="passwordInputRef"
+      v-model="form.password"
+      name="password"
+      label="password"
+      placeholder="Password"
+    />
     <div class="mb-4 flex items-center">
       <input id="remember" v-model="form.remember" type="checkbox" name="remember" class="text-blue-500">
       <label for="remember" class="text-gray-600 ml-2">Remember User</label>

@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import Button from "@/features/shared/components/ui/Button.vue";
+import InputEmail from "@/features/shared/components/ui/form/InputEmail.vue";
+import InputPassword from "@/features/shared/components/ui/form/InputPassword.vue";
+import InputText from "@/features/shared/components/ui/form/InputText.vue";
 import { reactive, useTemplateRef } from "vue";
 import { useToast } from "vue-toastification";
 import { useAuthActions } from "../stores/auth";
@@ -19,15 +22,15 @@ const form = reactive({
 
 async function onRegister() {
   if (form.fullName.length < 2) {
-    return fullNameInputRef.value?.focus();
+    return (fullNameInputRef.value?.$refs.inputRef as HTMLInputElement | undefined)?.focus();
   }
 
   if (form.email === "") {
-    return emailInputRef.value?.focus();
+    return (emailInputRef.value?.$refs.inputRef as HTMLInputElement | undefined)?.focus();
   }
 
   if (form.password.length < 6) {
-    return passwordInputRef.value?.focus();
+    return (passwordInputRef.value?.$refs.inputRef as HTMLInputElement | undefined)?.focus();
   }
 
   const { ok, message } = await register(form.fullName, form.email, form.password);
@@ -42,50 +45,31 @@ async function onRegister() {
   <h1 class="text-2xl font-semibold mb-4">
     Register
   </h1>
-  <form @submit.prevent="onRegister">
-    <div class="mb-4">
-      <label for="name" class="block text-gray-600">Name</label>
-      <input
-        id="name"
-        ref="fullNameInputRef"
-        v-model="form.fullName"
-        type="text"
-        name="name"
-        class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-        autocomplete="off"
-      >
-    </div>
-
-    <div class="mb-4">
-      <label for="email" class="block text-gray-600">Email</label>
-      <input
-        id="email"
-        ref="emailInputRef"
-        v-model="form.email"
-        type="text"
-        name="email"
-        class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-        autocomplete="off"
-      >
-    </div>
-
-    <div class="mb-4">
-      <label for="password" class="block text-gray-600">Password</label>
-      <input
-        id="password"
-        ref="passwordInputRef"
-        v-model="form.password"
-        type="password"
-        name="password"
-        class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-        autocomplete="off"
-      >
-    </div>
-
+  <form class="space-y-4" @submit.prevent="onRegister">
+    <InputText
+      ref="fullNameInputRef"
+      v-model="form.fullName"
+      label="name"
+      name="fullName"
+      placeholder="Enter your name"
+    />
+    <InputEmail
+      ref="emailInputRef"
+      v-model="form.email"
+      name="email"
+      label="email"
+      placeholder="Enter your email"
+    />
+    <InputPassword
+      ref="passwordInputRef"
+      v-model="form.password"
+      name="password"
+      label="password"
+      placeholder="Enter your password"
+    />
     <div class="mb-6 text-blue-500">
       <a href="#" class="hover:underline">Forgot Password?</a>
     </div>
-
     <Button
       type="submit"
       class="w-full"

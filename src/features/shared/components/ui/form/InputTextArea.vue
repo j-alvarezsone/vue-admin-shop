@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ErrorMessage, useField } from "vee-validate";
-import { computed, toRef, useSlots } from "vue";
+import { computed, toRef, useSlots, useTemplateRef } from "vue";
 
 interface Props {
   name: string
@@ -32,6 +32,7 @@ defineEmits<{
 }>();
 
 const slot = useSlots();
+useTemplateRef("inputRef");
 
 const { value, handleChange, handleBlur, errors } = useField<string>(toRef(props, "name"), undefined, {
   standalone: props.standalone,
@@ -59,6 +60,7 @@ const style = computed(() => {
     </label>
     <textarea
       :id="name"
+      ref="inputRef"
       v-focus="focus"
       :value="value"
       :class="style"
