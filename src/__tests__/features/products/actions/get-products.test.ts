@@ -9,7 +9,7 @@ const mock = new MockAdapter(tesloApi);
 
 beforeEach(() => {
   mock.reset();
-  mock.onGet(/\/products.*/).reply(200, fakeProducts);
+  mock.onGet(/\/?products.*/).reply(200, fakeProducts);
 });
 
 describe("getProductsAction", () => {
