@@ -2,8 +2,8 @@ import { adminRoutes } from "@/features/admin/routes";
 import { AUTH_STATUS } from "@/features/auth/constants/auth";
 import { authRoutes } from "@/features/auth/routes";
 import { useAuthActions, useAuthState } from "@/features/auth/stores/auth";
+import ShopLayout from "@/features/shop/layouts/ShopLayout.vue";
 import { createRouter, createWebHistory } from "vue-router";
-import ShopLayout from "../layouts/ShopLayout.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
