@@ -1,0 +1,28 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<ProductsView /> > should render with default values 1`] = `
+"<div class="bg-white px-5 py-2 rounded">
+  <div class="flex items-center gap-6">
+    <h1 class="text-3xl"> Products </h1>
+    <input-text-stub name="search" placeholder="Search by title" required="true" type="text" tooltipplacement="top" icon="search" iconpos="left" size="md" iconsize="size-4" standalone="false" disabled="false" copy="false" noborder="false" loading="false" clearable="true" onepassword="false" modelvalue="" edit="false" class="w-full"></input-text-stub>
+    <input-select-stub options="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" name="size" placeholder="Select size" disabled="false" searchable="false" size="md" clearable="true" searchclearable="true" standalone="false" required="true" loading="false" itemheight="44" tooltipplacement="top" copy="false" disablefilter="false" selectfirst="false" modelvalue="all" search="" class="w-60"></input-select-stub>
+  </div>
+  <div class="py-8 w-full">
+    <div class="shadow overflow-hidden rounded border-b border-gray-200">
+      <table class="min-w-full bg-white">
+        <thead class="bg-gray-800 text-white">
+          <tr>
+            <th class="w-10 text-left py-3 px-4 uppercase font-semibold text-sm"> Images </th>
+            <th class="flex-1 text-left py-3 px-4 uppercase font-semibold text-sm"> Title </th>
+            <th class="w-28 py-3 px-4 uppercase font-semibold text-sm"> Price </th>
+            <th class="w-60 text-left py-3 px-4 uppercase font-semibold text-sm"> Sizes </th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700"></tbody>
+      </table>
+      <!--v-if-->
+    </div>
+  </div>
+  <pagination-stub page="1" hasmoredata="false" class="bg-white"></pagination-stub>
+</div>"
+`;
