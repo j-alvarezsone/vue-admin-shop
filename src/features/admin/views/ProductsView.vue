@@ -126,7 +126,7 @@ watchEffect(() => {
             </tr>
           </tbody>
         </table>
-        <div v-if="!filteredProducts?.length" class="h-80 w-full centered">
+        <div v-if="!filteredProducts?.length && search.length" class="h-80 w-full centered">
           <span class="text-2xl">No products found...</span>
         </div>
       </div>
