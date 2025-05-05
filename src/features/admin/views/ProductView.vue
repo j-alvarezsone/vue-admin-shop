@@ -4,7 +4,7 @@ import { createUpdateProductAction, getProductByIdAction } from "@/features/prod
 import Button from "@/features/shared/components/ui/Button.vue";
 import InputSelect from "@/features/shared/components/ui/form/InputSelect.vue";
 import InputText from "@/features/shared/components/ui/form/InputText.vue";
-import InputTextArea from "@/features/shared/components/ui/form/InputTextArea.vue";
+import InputTextarea from "@/features/shared/components/ui/form/InputTextarea.vue";
 import { useMutation, useQuery } from "@tanstack/vue-query";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useFieldArray, useFieldError, useForm } from "vee-validate";
@@ -155,7 +155,7 @@ const onSubmit = handleSubmit((values) => {
       <div class="flex flex-col gap-4">
         <InputText name="title" label="title" placeholder="Enter product name" />
         <InputText name="slug" label="slug" placeholder="Unique url identifier" />
-        <InputTextArea name="description" label="description" placeholder="Enter product description" />
+        <InputTextarea name="description" label="description" placeholder="Enter product description" />
         <div class="flex flex-col lg:flex-row gap-3">
           <InputText class="w-full" name="price" label="price" type="number" />
           <InputText class="w-full" name="stock" label="inventory" type="number" />
